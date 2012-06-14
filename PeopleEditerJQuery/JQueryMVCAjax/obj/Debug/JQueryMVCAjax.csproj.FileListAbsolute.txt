@@ -1,0 +1,10 @@
+D:\Rilong\PeopleEditer\PeopleEditerJQuery\JQueryMVCAjax\bin\JQueryMVCAjax.dll
+D:\Rilong\PeopleEditer\PeopleEditerJQuery\JQueryMVCAjax\bin\JQueryMVCAjax.pdb
+D:\Rilong\PeopleEditer\PeopleEditerJQuery\JQueryMVCAjax\bin\EntityFramework.dll
+D:\Rilong\PeopleEditer\PeopleEditerJQuery\JQueryMVCAjax\bin\EntityFramework.xml
+D:\Rilong\PeopleEditer\PeopleEditerJQuery\JQueryMVCAjax\obj\Debug\ResolveAssemblyReference.cache
+D:\Rilong\PeopleEditer\PeopleEditerJQuery\JQueryMVCAjax\obj\Debug\JQueryMVCAjax.dll
+D:\Rilong\PeopleEditer\PeopleEditerJQuery\JQueryMVCAjax\obj\Debug\JQueryMVCAjax.pdb
+D:\Rilong\PeopleEditer\PeopleEditerJQuery\JQueryMVCAjax\bin\Newtonsoft.Json.dll
+D:\Rilong\PeopleEditer\PeopleEditerJQuery\JQueryMVCAjax\bin\Newtonsoft.Json.pdb
+D:\Rilong\PeopleEditer\PeopleEditerJQuery\JQueryMVCAjax\bin\Newtonsoft.Json.xml

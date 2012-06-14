@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link href="CSS/PeopleEditer.css" rel="stylesheet" type="text/css" />
+    <script src="Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="Scripts/JQuery.PeopleEditer.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#PeopleEdit').PeopleEditer();
+            $('#Div1').PeopleEditer();
+            $('#Div2').PeopleEditer();
+        });
+        
+    </script>
+</head>
+<body>
+    <div   id="PeopleEdit">Zixin Yin (Beijing Aotesiqi);redmond\v-zixyin|Hui Cai (Beijing Aotesiqi);redmond\v-huicai</div>
+    <br />
+    <div   id="Div1">Zixin Yin (Beijing Aotesiqi);redmond\v-zixyin|Hui Cai (Beijing Aotesiqi);redmond\v-huicai</div>
+    <br />
+    <div   id="Div2">Zixin Yin (Beijing Aotesiqi);redmond\v-zixyin|Hui Cai (Beijing Aotesiqi);redmond\v-huicai</div>
+    <br />
+    <input type="button" value="VialdateAlias" onclick="$.when($('.JQuery_Plug_PeopleEditer').each(function(){$(this).VialdateAlias()})).done(function(){});" />
+</body>
+</html>
