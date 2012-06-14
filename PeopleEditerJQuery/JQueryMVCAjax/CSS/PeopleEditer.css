@@ -1,0 +1,98 @@
+﻿/* File Created: June 1, 2012 */
+
+
+.JQuery_Plug_PeopleEditer
+{
+	border: 1.5px solid #DCDCDC;
+	width: 350px;
+	height: 60px;
+	font-family: :Calibri;
+	font-size: 14px;
+	cursor: text;
+	overflow-Y: scroll;
+	overflow-X:hidden;
+	position: :absolute;
+	word-break:break-all;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	z-index: 0;
+}
+input.JQuery_Plug_PeopleEditer_input
+{
+	 width:1px;  border:none;
+}
+
+.inputHiddenText
+{
+	overflow-X:visible;
+	overflow-Y:visible;
+	
+}
+
+.JQuery_Plug_PeopleEditer_Alias_Layer
+{
+	position: absolute;
+	z-index: 1;
+	background-color: #FECF4A;
+}
+
+.JQuery_Plug_PeopleEditer_img_loading
+{
+	position: absolute;
+	height:30px;
+}
+
+.JQuery_Plug_PeopleEditer_img
+{
+	position:absolute;
+}
+.JQuery_Plug_PeopleEditer_img img 
+{
+	cursor:pointer;
+}
+.JQuery_Plug_PeopleEditer_checkNameimg_Disable
+{
+	cursor: default;
+}
+
+.JQuery_Plug_PeopleEditer_AliasSelected
+{
+	background-color: #8DA3C1;
+}
+.JQuery_Plug_PeopleEditer_Alias
+{
+	cursor: :default;
+	font-family: Calibri;
+	font-size: 14px;
+
+	display: inline-block;      
+	zoom: 1;                     
+	*display: inline;     
+	margin-right: 5px;
+	margin-left: 5px;
+	margin-bottom: 6px;
+}
+.JQuery_Plug_PeopleEditer_Alias:hover{ background-color:#9CAAC1; cursor :default ;  }
+
+.JQuery_Plug_PeopleEditer_ResolveError
+{
+	background-image: url('../Pic/squiggle.png');
+	padding-bottom: 2px;
+	background-repeat: repeat;
+	color: #000000;
+	vertical-align: text-top;
+	background-position:left bottom;
+	font-style: italic;
+}
+.JQuery_Plug_PeopleEditer_AliasResolved
+{
+	border-bottom: 1px solid black;
+	padding-bottom: 0px;
+}
+.unresolve
+{
+	
+	border: none;
+	padding-bottom: 2px;
+}
+
