@@ -1,4 +1,4 @@
-PeopleEditer
+[PeopleEditer](https://github.com/rilonggithub/PeopleEditer)
 ============
 
-JQuery plug 
+This is a simple JQuery plug , you can free download this project for self devepment.
