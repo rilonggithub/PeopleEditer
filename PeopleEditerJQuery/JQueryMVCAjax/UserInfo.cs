@@ -14,7 +14,7 @@ namespace LMXCommonTool
         /// <summary>
         /// like Lefei Li (Beijing Aotesiqi)
         /// </summary>
-        public string userDisplayName { get; set; }
+        public string userDisplayName { get; set; } 
         /// <summary>
         /// like v-lefeil@microsoft.com
         /// </summary>
@@ -27,6 +27,7 @@ namespace LMXCommonTool
         /// whether it's found in AD
         /// </summary>
         public bool IsInAD { get; set; }
+        public string Type { get; set; }
         public UserInfo()
         {
             userAlias = string.Empty;
@@ -43,6 +44,7 @@ namespace LMXCommonTool
         public string DisplayName { get; set; }
         public string OriginalText { get; set; }
         public string AccountName { get; set; }
+        public string Type { get; set; }
     }
 
     public class ResolveError
@@ -50,7 +52,7 @@ namespace LMXCommonTool
         public string OriginalText{get;set;}
     }
 
-    public class ResolveResult
+    public class ResolveResult  
     {
         public Resolved[] ResolvedResult { set; get; }
         public ResolveError ResolvedErrorResult { get; set; }

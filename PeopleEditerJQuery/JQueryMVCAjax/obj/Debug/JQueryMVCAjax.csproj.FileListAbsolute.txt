@@ -8,3 +8,12 @@ D:\Rilong\PeopleEditer\PeopleEditerJQuery\JQueryMVCAjax\obj\Debug\JQueryMVCAjax.
 D:\Rilong\PeopleEditer\PeopleEditerJQuery\JQueryMVCAjax\bin\Newtonsoft.Json.dll
 D:\Rilong\PeopleEditer\PeopleEditerJQuery\JQueryMVCAjax\bin\Newtonsoft.Json.pdb
 D:\Rilong\PeopleEditer\PeopleEditerJQuery\JQueryMVCAjax\bin\Newtonsoft.Json.xml
+C:\Users\Administrator\Documents\GitHub\PeopleEditer\PeopleEditerJQuery\JQueryMVCAjax\bin\JQueryMVCAjax.dll
+C:\Users\Administrator\Documents\GitHub\PeopleEditer\PeopleEditerJQuery\JQueryMVCAjax\bin\JQueryMVCAjax.pdb
+C:\Users\Administrator\Documents\GitHub\PeopleEditer\PeopleEditerJQuery\JQueryMVCAjax\bin\EntityFramework.dll
+C:\Users\Administrator\Documents\GitHub\PeopleEditer\PeopleEditerJQuery\JQueryMVCAjax\bin\EntityFramework.xml
+C:\Users\Administrator\Documents\GitHub\PeopleEditer\PeopleEditerJQuery\JQueryMVCAjax\bin\Newtonsoft.Json.pdb
+C:\Users\Administrator\Documents\GitHub\PeopleEditer\PeopleEditerJQuery\JQueryMVCAjax\bin\Newtonsoft.Json.xml
+C:\Users\Administrator\Documents\GitHub\PeopleEditer\PeopleEditerJQuery\JQueryMVCAjax\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Administrator\Documents\GitHub\PeopleEditer\PeopleEditerJQuery\JQueryMVCAjax\obj\Debug\JQueryMVCAjax.dll
+C:\Users\Administrator\Documents\GitHub\PeopleEditer\PeopleEditerJQuery\JQueryMVCAjax\obj\Debug\JQueryMVCAjax.pdb

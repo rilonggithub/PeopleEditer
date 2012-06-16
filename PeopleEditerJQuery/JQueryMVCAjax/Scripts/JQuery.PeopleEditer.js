@@ -4,7 +4,7 @@
 	* 插件名字    PeopleEditer
 	* 功能        实现从AD域读取Alias并显示，能够检查名字、查找名字、错误名字提示信息、删除整个人名
 	* 作者        廖日龙.
-	* 日期        2012/06
+	* 日期        2012/06/17
 	*/
 	var JQueryPeopleEditer_BACKSPACE_KEY = 8;   /*  BackSpace 键  */
 	var JQueryPeopleEditer_RIGHT_KEY = 39;      /*  Right 键      */
@@ -31,49 +31,98 @@
 	/*                                                                                                                                  
 	/*
 	/*
-	/*   插件名： PeopleEditer
-	/*   功能  ： 实现从AD域读取Alias并显示，能够检查名字、查找名字、错误名字提示信息、删除整个人名
-	/*
+	/*   @插件名： PeopleEditer
+	/*   @功能  ： 实现从AD域读取Alias并显示，能够检查名字、查找名字、错误名字提示信息、删除整个人名
+	/*   @example : $('.PeopleEditer').PeopleEditer();
 	/*   
 	/*
 	/*
 	/*
 	/***********************************************************************************************************************************/
-	$.fn.PeopleEditer = function () {
-		return this.each(function () {
-			InitiatPeopleEditerIcon(this); /*  初始化插件Div的图标*/
-			InitiatPeopleEditerClickEvent(this); /*  初始化插件Div的单击事件*/
-			InitiatPeopleEditerText(this);  /*  初始化处理插件Div中的文本内容*/
-			InitiatDoubleClickErrorResolveAliasEvent(this);  /*  初始化双击解析错误的Alias时的事件*/
+	$.fn.extend({
+		PeopleEditer: function () {
+			return this.each(function () {
+				InitiatPeopleEditerIcon(this); /*  初始化插件Div的图标*/
+				InitiatCheckNameEvent(this);
+				InitiatPeopleEditerClickEvent(this); /*  初始化插件Div的单击事件*/
+				InitiatPeopleEditerText(this);  /*  初始化处理插件Div中的文本内容*/
+				InitiatDoubleClickErrorResolveAliasEvent(this);  /*  初始化双击解析错误的Alias时的事件*/
 
-		});
-	};
+			});
+		},
 
 
 
 
 
-	/************************************************************插件********************************************************************/
-	/*                                                                                                                                  
-	/*
-	/*
-	/*   插件名： VialdateAlias
-	/*   功能  ： 验证指定PeopleEditer插件中的Alias的合法性，实现了deferred对象。
-	/*
-	/*   
-	/*
-	/*
-	/*
-	/***********************************************************************************************************************************/
-	$.fn.VialdateAlias = function () {
-		if ($(this).hasClass('JQuery_Plug_PeopleEditer')) {
-			var dtd = $.Deferred();                         /*  定义一个私有的 Deferred 对象  */
-			return InitiatPeopleEditerCheckName(this, dtd); /*  验证插件Div中所有Alias的合法性*/
+		/************************************************************插件********************************************************************/
+		/*                                                                                                                                  
+		/*
+		/*
+		/*   @插件名： VialdateAlias
+		/*   @功能  ： 验证指定PeopleEditer插件中的Alias的合法性，实现了deferred对象。
+		/*   @example : $('.PeopleEditer').VialdateAlias();
+		/*   
+		/*
+		/*
+		/*
+		/***********************************************************************************************************************************/
+		VialdateAlias: function () {
+				if ($(this).hasClass('JQuery_Plug_PeopleEditer')) {
+					var dtd = $.Deferred();                         /*  定义一个私有的 Deferred 对象  */
+					return InitiatPeopleEditerCheckName(this, dtd); /*  验证插件Div中所有Alias的合法性*/
+				}
+		},
+
+
+
+
+		/************************************************************插件********************************************************************/
+		/*                                                                                                                                  
+		/*
+		/*
+		/*   @插件名： GetAlias
+		/*   @功能  ： 得到指定PeopleEditer插件中的Alias。
+		/*   @example : $('.PeopleEditer').GetAlias();
+		/*   
+		/*
+		/*
+		/*
+		/***********************************************************************************************************************************/
+		GetAlias: function (type) {
+			if (type !== 'displayName' && type !== 'accountName' && type !== 'all' && arguments.length === 1) return "";
+			else if (arguments.length === 0) { type = 'displayName'; }
+			var _aliasText = '';
+			if ($(this).hasClass('JQuery_Plug_PeopleEditer')) {
+				$('div', $(this)).each(function () {
+					if (type === 'displayName') {
+						_aliasText = _aliasText + ($(this).text() + '|');
+					} else if (type === 'accountName') {
+						_aliasText = _aliasText + ($(this).attr('title') + '|');
+					} else {
+						_aliasText = _aliasText + ($(this).text() + $(this).attr('title') + ';' + $(this).attr('class').split(' ')[2] + '|');
+					}
+				});
+				return _aliasText;
+			}
 		}
-	};
+	});
 
 
 
+
+	/**
+	*   函数名： InitiatCheckNameEvent
+	*   功能  ： 初始化单击checkName图标时的事件
+	*
+	*  参数
+	*       $source : 代表插件Div 的DOM对象
+	**/
+	function InitiatCheckNameEvent($source) {
+		$('img.JQuery_Plug_PeopleEditer_img_CheckName', $($source).next('div.JQuery_Plug_PeopleEditer_img')).click(function () {
+			InitiatPeopleEditerCheckName($source, null);
+		});
+	}
 
 
 	/**
@@ -120,7 +169,7 @@
 		for (var i = 0; i < _aliasArray.length; i++) {
 			if (_aliasArray[i].length > 0) {
 				var _aliasInfo = _aliasArray[i].split(';');
-				var _html = "<div class='JQuery_Plug_PeopleEditer_Alias JQuery_Plug_PeopleEditer_AliasResolved'>" + _aliasInfo[0] + ';' + "</div>";
+				var _html = "<div title='" + _aliasInfo[1] + "' class='JQuery_Plug_PeopleEditer_Alias JQuery_Plug_PeopleEditer_AliasResolved " + _aliasInfo[2] + "'>" + _aliasInfo[0] + ';' + "</div>";
 				$(_html).appendTo($($source));
 				$('div.JQuery_Plug_PeopleEditer_AliasResolved', $($source)).filter(function () { return $(this).text() === _aliasInfo[0] }).data('AliasName', _aliasInfo[1]);
 			}
@@ -157,9 +206,11 @@
 		_jquery_html += "<img title='Browse' class='JQuery_Plug_PeopleEditer_img_FindName' src='Pic/addressbook.gif' />";
 		_jquery_html += "</div>";
 		/* 将图标加到插件Div的后面*/
-		$(_jquery_html).appendTo($($source));
+		$(_jquery_html).insertAfter($($source));
 		/* 设置图标Div的位置*/
-		$('.JQuery_Plug_PeopleEditer_img', $($source)).css({ 'top': $($source).offset().top, 'left': $($source).offset().left + parseInt($($source).width()) + 8 });
+		var _margin_top = 22;   /*  checkName Img Div 往上的margin-top  的值*/
+		$($source).next('div.JQuery_Plug_PeopleEditer_img').css({ 'margin-top': -($($source).height() + _margin_top), 'margin-left': $($source).width() + 8 });
+
 		//InitiatPeopleEditerIcon_img_CheckName($source);
 	}
 
@@ -173,12 +224,21 @@
 	*   dtd     : 一个deferred对象，可以实现when的延时操作
 	**/
 	function InitiatPeopleEditerCheckName($source, dtd) {
+		if ($('div.JQuery_Plug_PeopleEditer_ResolveError', $($source)).length > 0) {
+			if (dtd !== null) {
+				dtd.reject();
+				return dtd;
+			}
+		}
 		if ($('img.JQuery_Plug_PeopleEditer_img_loading', $($source)).length > 0) return;
 		var _alias = '';
 		$('div.JQuery_Plug_PeopleEditer_Alias:not([class*=AliasResolved],[class*=ResolveError])', $($source)).each(function () {
 			_alias += ($(this).text().substring(0, $(this).text().length));
 		});
-		if (_alias.length === 0) return;
+		if (_alias.length === 0) {
+			return;
+		}
+
 		$.ajax({
 			type: "get",
 			url: "/checkAlias?aliasList=" + _alias,
@@ -195,21 +255,26 @@
 				{ }
 				/*  如果deferred 对象不为空的话，改变它的状态为  “完成” ， 以致页面上的的when 函数的done函数可以执行 */
 				if (dtd !== null) {
-					dtd.resolve();
-
+					if (_result.ResolvedErrorResult.OriginalText.length > 1) {
+						dtd.reject();
+					} else {
+						dtd.resolve();
+					}
 				}
 			},
 			error: function () {
+
+
+				var errorResult = 'responseText: ' + result.responseText.substring(0, 500) + '\n\r\n\r......\n\r\n\r status: '
+					+ result.status + '\n\r\n\r statusText: ' + result.statusText + '\n\r\n\r readyState: ' + result.readyState;
+				alert(errorResult);
 				/*  如果deferred 对象不为空的话，改变它的状态为  “失败” ， 以致页面上的的when 函数的Fail函数可以执行 */
 				if (dtd !== null) {
 					dtd.reject();
 				}
-				var errorResult = 'responseText: ' + result.responseText.substring(0, 500) + '\n\r\n\r......\n\r\n\r status: '
-					+ result.status + '\n\r\n\r statusText: ' + result.statusText + '\n\r\n\r readyState: ' + result.readyState;
-				alert(errorResult);
 			},
 			beforeSend: function () {
-				$('img.JQuery_Plug_PeopleEditer_img_CheckName', $($source)).addClass('JQuery_Plug_PeopleEditer_checkNameDisable').attr('src', 'Pic/checknames_disable.png');
+				$('img.JQuery_Plug_PeopleEditer_img_CheckName', $($source).next('div.JQuery_Plug_PeopleEditer_img')).addClass('JQuery_Plug_PeopleEditer_checkNameDisable').attr('src', 'Pic/checknames_disable.png');
 				var _img = "<img class='JQuery_Plug_PeopleEditer_img_loading' src='Pic/loading.gif'>";
 				var _layer = "<div class='JQuery_Plug_PeopleEditer_Alias_Layer'></div>";
 				var _top = $($source).offset().top;
@@ -219,17 +284,21 @@
 				$(_layer).appendTo($($source));
 				$('div.JQuery_Plug_PeopleEditer_Alias_Layer', $($source)).css({ 'top': _top, 'left': _left, 'width': _width, 'height': _height, 'opacity': 0.1 });
 				$(_img).appendTo($($source));
-				$('img.JQuery_Plug_PeopleEditer_img_loading', $($source)).css({ 'top': _top + 20, 'left': _left + 150 });
+				var _loadingImg_left = _left + (_width / 2);
+				var _loadingImg_top = _top + 20;
+				$('img.JQuery_Plug_PeopleEditer_img_loading', $($source)).css({ 'top': _loadingImg_top, 'left': _loadingImg_left });
 
 			},
 			complete: function () {
 				$('div.JQuery_Plug_PeopleEditer_Alias_Layer', $($source)).remove();
 				$('img.JQuery_Plug_PeopleEditer_img_loading', $($source)).remove();
-				$('img.JQuery_Plug_PeopleEditer_img_CheckName', $($source)).removeClass('JQuery_Plug_PeopleEditer_checkNameDisable').attr('src', 'Pic/checknames.png');
+				$('img.JQuery_Plug_PeopleEditer_img_CheckName', $($source).next('div.JQuery_Plug_PeopleEditer_img')).removeClass('JQuery_Plug_PeopleEditer_checkNameDisable').attr('src', 'Pic/checknames.png');
 			}
 		});
 		/*  如果deferred 对象不为空的话，返回它的状态和信息， 以致页面上的的when 函数的done函数可以执行 */
-		if (dtd !== null) { return dtd.promise(); }
+		if (dtd !== null) {
+			return dtd;
+		}
 	}
 
 
@@ -255,7 +324,8 @@
 			$('div.JQuery_Plug_PeopleEditer_Alias', $($source)).each(function () {
 				if ($(this).text().toLowerCase() === (result[i].OriginalText + ';')) {
 					$(this).removeClass('JQuery_Plug_PeopleEditer_ResolveError').removeClass('unresolve');
-					$(this).text(result[i].DisplayName + ';').addClass('JQuery_Plug_PeopleEditer_AliasResolved').attr('title', '');
+					$(this).text(result[i].DisplayName + ';').addClass('JQuery_Plug_PeopleEditer_AliasResolved ' + result[i].Type);
+					$(this).attr('title', result[i].AccountName);
 				}
 			});
 		}
@@ -316,22 +386,17 @@
 	**/
 	function InitiatPeopleEditerClickEvent($source) {
 		$($source).click(function (event) {
-			if ($(event.target).attr('class').indexOf('JQuery_Plug_PeopleEditer_img_CheckName') > -1) {
-				InitiatPeopleEditerCheckName($source, null);
-				return;
-			}
-
 			if (event.target !== this) return;
 			$('div.JQuery_Plug_PeopleEditer_Alias', $($source)).each(function () {
 				$(this).removeClass('JQuery_Plug_PeopleEditer_AliasSelected');
 			});
 			GenerateInputByClickEvent(this);
 		})
-	.keyup(function (event) {
-		if (event.which === JQueryPeopleEditer_DELETE) {
-			$('div.JQuery_Plug_PeopleEditer_AliasSelected', $($source)).remove();
-		}
-	});
+		.keyup(function (event) {
+			if (event.which === JQueryPeopleEditer_DELETE) {
+				$('div.JQuery_Plug_PeopleEditer_AliasSelected', $($source)).remove();
+			}
+		});
 	}
 
 	/**
@@ -382,6 +447,14 @@
 				});
 			}
 			JQueryPeopleEditer_inputWidth = 0;
+			/*  当PeopleEditer 插件中的最后一个alias div 的 top 大于了 PeopleEditer 插件的 offset().top+ height 的时候，就显示Y轴的滚动条*/
+			if ($('div.JQuery_Plug_PeopleEditer_Alias:last', $($source)).length > 0) {
+				if ($('div.JQuery_Plug_PeopleEditer_Alias:last', $($source)).offset().top > $($source).offset().top + $($source).height()) {
+					if ($($source).css('overflow-Y') !== 'scroll') {
+						$($source).css('overflow-Y', 'scroll');
+					}
+				}
+			}
 		})
 		/*  绑定Input 的键盘输入事件， */
 		.keydown(function (event) {
@@ -430,7 +503,8 @@
 						}
 					}
 				}
-				SetInputWidthWhenChangeTextByChar($source, $(this), event.key);  /*   随着字符改变input 的宽度*/
+				/*  这里是为了兼容IE8及以下的版本， 因为它们没有event.key属性*/
+				SetInputWidthWhenChangeTextByChar($source, $(this), event.key ? event.key : "w");  /*   随着字符改变input 的宽度*/
 			}
 		})
 		.keyup(function (event) {
@@ -536,11 +610,9 @@
 	function operationWhenPressRight($input, $source) {
 		if ($($input).val().length === 0 && ($($input).data('Current_Textlength') === 0 || $($input).data('Current_Textlength') === undefined)) {
 			/*  如果input的前一个元素是checkName的图标Div， 那么就选择图标Div的前一个*/
-			if ($($input).next('div.JQuery_Plug_PeopleEditer_Alias').length === 0) {
-				$($input).next().next('div.JQuery_Plug_PeopleEditer_Alias').insertBefore($($input));  /*将当前Input的下下一个Div移动到input的前面*/
-			} else {
-				$($input).next('div.JQuery_Plug_PeopleEditer_Alias').insertBefore($($input));  /*将当前Input的下一个Div移动到input的前面*/
-			}
+
+			$($input).next('div.JQuery_Plug_PeopleEditer_Alias').insertBefore($($input));  /*将当前Input的下一个Div移动到input的前面*/
+
 			$($source).data('$InputPrevAliasDom', $('.JQuery_Plug_PeopleEditer_input', $($source)).prev('div.JQuery_Plug_PeopleEditer_Alias')); /*跟踪input的前一个Alias Div*/
 
 		}
@@ -558,11 +630,8 @@
 	function operationWhenPressLeft($input, $source) {
 		if ($($input).val().length === 0 && ($($input).data('Current_Textlength') === 0 || $($input).data('Current_Textlength') === undefined)) {
 			/*  如果input的前一个元素是checkName的图标Div， 那么就选择图标Div的前一个*/
-			if ($($input).prev('div.JQuery_Plug_PeopleEditer_Alias').length === 0) {
-				$($input).prev().prev('div.JQuery_Plug_PeopleEditer_Alias').insertAfter($($input)); /*将当前Input的上上一个Div移动到input的后面*/
-			} else {
-				$($input).prev('div.JQuery_Plug_PeopleEditer_Alias').insertAfter($($input)); /*将当前Input的上一个Div移动到input的后面*/
-			}
+			$($input).prev('div.JQuery_Plug_PeopleEditer_Alias').insertAfter($($input)); /*将当前Input的上一个Div移动到input的后面*/
+
 			$($source).data('$InputPrevAliasDom', $('.JQuery_Plug_PeopleEditer_input', $($source)).prev('div.JQuery_Plug_PeopleEditer_Alias')); /*跟踪input的前一个Alias Div*/
 		}
 	}
@@ -581,22 +650,17 @@
 			/*   如果是backspace键的话，就删除input前面的Alias*/
 			if (key === JQueryPeopleEditer_BACKSPACE_KEY) {
 				/*  如果input的前一个元素是checkName的图标Div， 那么就选择图标Div的前一个*/
-				if ($($input).prev().attr('class').indexOf('JQuery_Plug_PeopleEditer_img') > -1) {
-					$($input).prev().prev('div.JQuery_Plug_PeopleEditer_Alias').remove(); /*删除当前input的前一个Alias Div*/
-					$($source).data('$InputPrevAliasDom', $('.JQuery_Plug_PeopleEditer_input', $($source)).prev().prev('div.JQuery_Plug_PeopleEditer_Alias'));
-				} else {
-					$($input).prev('div.JQuery_Plug_PeopleEditer_Alias').remove(); /*删除当前input的前一个Alias Div*/
-					$($source).data('$InputPrevAliasDom', $('.JQuery_Plug_PeopleEditer_input', $($source)).prev('div.JQuery_Plug_PeopleEditer_Alias')); /*跟踪input的前一个Alias Div*/
-				}
+
+				$($input).prev('div.JQuery_Plug_PeopleEditer_Alias').remove(); /*删除当前input的前一个Alias Div*/
+				$($source).data('$InputPrevAliasDom', $('.JQuery_Plug_PeopleEditer_input', $($source)).prev('div.JQuery_Plug_PeopleEditer_Alias')); /*跟踪input的前一个Alias Div*/
+
 			}
 			/*   如果是Delete键的话，就删除input后面的Alias*/
 			else if (key === JQueryPeopleEditer_DELETE) {
 				/*  如果input的后一个元素是checkName的图标Div， 那么就选择图标Div的后一个*/
-				if ($($input).next().attr('class').indexOf('JQuery_Plug_PeopleEditer_img') > -1) {
-					$($input).next().next('div.JQuery_Plug_PeopleEditer_Alias').remove(); /*删除当前input的后一个Alias Div*/
-				} else {
-					$($input).next('div.JQuery_Plug_PeopleEditer_Alias').remove(); /*删除当前input的后一个Alias Div*/
-				}
+
+				$($input).next('div.JQuery_Plug_PeopleEditer_Alias').remove(); /*删除当前input的后一个Alias Div*/
+
 
 			}
 		}
@@ -869,8 +933,14 @@
 	*   _text   :  代表当前输入在Input中的字符
 	**/
 	function SetInputWidthWhenChangeTextByChar($source, $input, _text) {
-		/*  绑定Input 的change事件*/
-
+		/*  当PeopleEditer 插件中的最后一个alias div 的 top 大于了 PeopleEditer 插件的top+ height 的时候，就显示Y轴的滚动条*/
+		if ($('div.JQuery_Plug_PeopleEditer_Alias:last', $($source)).length > 0) {
+			if ($('div.JQuery_Plug_PeopleEditer_Alias:last', $($source)).offset().top > $($source).offset().top + $($source).height()) {
+				if ($($source).css('overflow-Y') !== 'scroll') {
+					$($source).css('overflow-Y', 'scroll');
+				}
+			}
+		}
 		if (JQueryPeopleEditer_Width5_Array.in_array(_text)) {
 			JQueryPeopleEditer_inputWidth += JQueryPeopleEditer_WIDTH5;
 		}
@@ -911,6 +981,7 @@
 	function SetInputWidthAccordingToInputText($source, $input, _text) {
 
 		if (_text === undefined || _text === null) return;
+
 		var _inputWidth = 0;
 		for (var i = 0; i < _text.length; i++) {
 			if (JQueryPeopleEditer_Width5_Array.in_array(_text[i])) {

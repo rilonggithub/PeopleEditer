@@ -3,23 +3,29 @@
 
 .JQuery_Plug_PeopleEditer
 {
+    background-color: White;
 	border: 1.5px solid #DCDCDC;
 	width: 350px;
-	height: 60px;
-	font-family: :Calibri;
+	height: 30px;
+	font-family: Calibri;
 	font-size: 14px;
 	cursor: text;
-	overflow-Y: scroll;
+	overflow-Y: hidden;
 	overflow-X:hidden;
-	position: :absolute;
 	word-break:break-all;
 	padding-top: 10px;
 	padding-bottom: 10px;
 	z-index: 0;
+	text-align: left;
 }
 input.JQuery_Plug_PeopleEditer_input
 {
-	 width:1px;  border:none;
+	 width:1px;  border:none;  position:relative;
+
+
+
+
+	
 }
 
 .inputHiddenText
@@ -44,7 +50,9 @@ input.JQuery_Plug_PeopleEditer_input
 
 .JQuery_Plug_PeopleEditer_img
 {
-	position:absolute;
+    clear: both ;
+	position:relative ;
+	float: left ;
 }
 .JQuery_Plug_PeopleEditer_img img 
 {
@@ -61,7 +69,7 @@ input.JQuery_Plug_PeopleEditer_input
 }
 .JQuery_Plug_PeopleEditer_Alias
 {
-	cursor: :default;
+	cursor:default;
 	font-family: Calibri;
 	font-size: 14px;
 

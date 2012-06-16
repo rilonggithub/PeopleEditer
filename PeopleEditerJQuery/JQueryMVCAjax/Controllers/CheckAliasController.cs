@@ -19,11 +19,11 @@ namespace JQueryMVCAjax.Controllers
         
         private StringBuilder errorAlias =new StringBuilder ();
         private List<UserInfo> SampleData = new List<UserInfo> { 
-            new UserInfo{ queryName="v-huicai", userDisplayName="Hui Cai (Beijing Aotesiqi)", userAlias=@"redmond\v-huicai"},
-            new UserInfo{ queryName="v-zixyin", userDisplayName="ZiXin Yin (Beijing Aotesiqi)", userAlias=@"redmond\v-zixyin"},
-            new UserInfo{ queryName="v-lefeil", userDisplayName="LeFei li (Beijing Aotesiqi)", userAlias=@"redmond\v-lefeil"},
-            new UserInfo{ queryName="v-bopeng", userDisplayName="Bo Peng (Beijing Aotesiqi)", userAlias=@"redmond\v-bopeng"},
-            new UserInfo{ queryName="lmxsys", userDisplayName="LMX Syetem", userAlias=@"redmond\LMXSYS"}
+            new UserInfo{ queryName="v-huicai", userDisplayName="Hui Cai (Beijing Aotesiqi)", userAlias=@"redmond\v-huicai", Type="User"},
+            new UserInfo{ queryName="v-zixyin", userDisplayName="ZiXin Yin (Beijing Aotesiqi)", userAlias=@"redmond\v-zixyin",Type="User"},
+            new UserInfo{ queryName="v-lefeil", userDisplayName="LeFei li (Beijing Aotesiqi)", userAlias=@"redmond\v-lefeil",Type="User"},
+            new UserInfo{ queryName="v-bopeng", userDisplayName="Bo Peng (Beijing Aotesiqi)", userAlias=@"redmond\v-bopeng",Type="User"},
+            new UserInfo{ queryName="lmxsys", userDisplayName="LMX System", userAlias=@"redmond\LMXSYS",Type="Group"}
         };
         List<UserInfo> listUserInfo = new List<UserInfo>();
         private ResolveResult result = new ResolveResult();
@@ -41,9 +41,7 @@ namespace JQueryMVCAjax.Controllers
                 output = e.StackTrace;
             }
 
-            for (int i = 0; i < 900000000; i++) ; for (int i = 0; i < 900000000; i++) ;
-            for (int i = 0; i < 900000000; i++) ; for (int i = 0; i < 900000000; i++) ;
-            for (int i = 0; i < 900000000; i++) ; for (int i = 0; i < 900000000; i++) ;
+            for (int i = 0; i < 900000000; i++) ; 
 
                 return Json(output, JsonRequestBehavior.AllowGet);
         }
@@ -100,6 +98,7 @@ namespace JQueryMVCAjax.Controllers
                 re.AccountName = user.userAlias;
                 re.DisplayName = user.userDisplayName;
                 re.OriginalText = user.queryName;
+                re.Type = user.Type;
                 resolved[index++] = re;
             }
             result.ResolvedResult = resolved;
