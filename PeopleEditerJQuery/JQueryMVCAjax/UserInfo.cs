@@ -30,6 +30,7 @@ namespace LMXCommonTool
         public string Type { get; set; }
         public UserInfo()
         {
+            
             userAlias = string.Empty;
             userDisplayName = string.Empty;
             userEmail = string.Empty;
@@ -41,10 +42,10 @@ namespace LMXCommonTool
 
     public class Resolved
     {
-        public string DisplayName { get; set; }
-        public string OriginalText { get; set; }
-        public string AccountName { get; set; }
-        public string Type { get; set; }
+        public List<string> DisplayName { get; set; }
+        public List<string> OriginalText { get; set; }
+        public List<string> AccountName { get; set; }
+        public List<string> Type { get; set; }
     }
 
     public class ResolveError

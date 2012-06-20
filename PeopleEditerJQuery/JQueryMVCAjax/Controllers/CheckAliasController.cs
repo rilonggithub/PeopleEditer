@@ -22,8 +22,10 @@ namespace JQueryMVCAjax.Controllers
             new UserInfo{ queryName="v-huicai", userDisplayName="Hui Cai (Beijing Aotesiqi)", userAlias=@"redmond\v-huicai", Type="User"},
             new UserInfo{ queryName="v-zixyin", userDisplayName="ZiXin Yin (Beijing Aotesiqi)", userAlias=@"redmond\v-zixyin",Type="User"},
             new UserInfo{ queryName="v-lefeil", userDisplayName="LeFei li (Beijing Aotesiqi)", userAlias=@"redmond\v-lefeil",Type="User"},
-            new UserInfo{ queryName="v-bopeng", userDisplayName="Bo Peng (Beijing Aotesiqi)", userAlias=@"redmond\v-bopeng",Type="User"},
-            new UserInfo{ queryName="lmxsys", userDisplayName="LMX System", userAlias=@"redmond\LMXSYS",Type="Group"}
+            new UserInfo{ queryName="v-bopeng", userDisplayName="Bo Peng (New York Aotesiqi)", userAlias=@"redmond\v-bopeng",Type="User"},
+            new UserInfo{ queryName="v-bopeng", userDisplayName="Bo Peng (Beijing Aotesiqi)", userAlias=@"fareast\v-bopeng",Type="User"},
+            new UserInfo{ queryName="lmxsys", userDisplayName="LMX System", userAlias=@"redmond\LMXSYS",Type="Group"},
+            new UserInfo{ queryName="lmxsys", userDisplayName="LMX System (New York Aotesiqi)", userAlias=@"fareast\LMXSYS",Type="User"}
         };
         List<UserInfo> listUserInfo = new List<UserInfo>();
         private ResolveResult result = new ResolveResult();
@@ -41,25 +43,27 @@ namespace JQueryMVCAjax.Controllers
                 output = e.StackTrace;
             }
 
-            for (int i = 0; i < 900000000; i++) ; 
+            //for (int i = 0; i < 900000000; i++) ; 
 
-                return Json(output, JsonRequestBehavior.AllowGet);
+              return Json(output, JsonRequestBehavior.AllowGet);
         }
 
 
         /*
          * 
          * 
-         * 
+         * 从AD域里获取数据
          * 
          * 
          */
         private void GetUserFromAD(string aliasList)
         {
             listUserInfo = ADHelper.RetriveUsersListFromAD(aliasList, out errorAlias);
-            GetJson();
+            ResolveData();
         }
 
+
+        /* 获取用例数据*/
         private void GetUserFromSampleData(string aliasList)
         {
             
@@ -83,25 +87,67 @@ namespace JQueryMVCAjax.Controllers
                 IsResolve = false;
 
             }
-            GetJson();
+            ResolveData();
         }
 
-        private void GetJson()
+        /*    根据alias  在已经出现过的Alias数组里面查找， 如果这个alias以前出现过，就返回true,
+         *     并带回以前该Alias在数组里面的下标， 否则就返回false
+         */
+        private bool IsContainsAlias(Resolved[] resolved, string alias,out int resolvedIndex)
+        {
+            resolvedIndex=0;
+            try
+            {
+                for (int i = 0; i < resolved.Length; i++)
+                {
+                    for (int j = 0; j < resolved[i].OriginalText.Count; j++)
+                    {
+                        if (resolved[i].OriginalText[j].Equals(alias))
+                        {
+                            resolvedIndex = i;
+                            return true;
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+            }
+            return false;
+        }
+
+        /* 解析得到的数据，准备转换为JSON*/
+        private void ResolveData()
         {
 
-
+            int resolvedIndex=0;
             int index = 0;
             Resolved[] resolved = new Resolved[listUserInfo.Count];
             foreach (UserInfo user in listUserInfo)
             {
-                Resolved re = new Resolved();
-                re.AccountName = user.userAlias;
-                re.DisplayName = user.userDisplayName;
-                re.OriginalText = user.queryName;
-                re.Type = user.Type;
-                resolved[index++] = re;
+                /* 如果该alias以前出现过并且index > 0， 那就在以前的Alias的基础上，将该alias的信息添加到原来的Alias里面，
+                    因为 alias的信息都是以List<string>的形式存储的*/
+                if (index >0 && IsContainsAlias(resolved, user.queryName, out  resolvedIndex))
+                {
+                    resolved[resolvedIndex].AccountName.Add(user.userAlias);
+                    resolved[resolvedIndex].DisplayName.Add(user.userDisplayName);
+                    resolved[resolvedIndex].OriginalText.Add(user.queryName);
+                    resolved[resolvedIndex].Type.Add(user.Type);
+                }
+                /* 如果该alias以前没有出现过， 就重新分配一个存储alias信息的空间 。*/
+                else 
+                {
+                    Resolved re = new Resolved();
+                    re.AccountName =new List<string>() {(user.userAlias)};
+                    re.DisplayName= new List<string>() {(user.userDisplayName)};
+                    re.OriginalText =new List<string>() {(user.queryName)};
+                    re.Type =new List<string>() {(user.Type)};
+                    resolved[index++] = re;
+                }
             }
-            result.ResolvedResult = resolved;
+            result.ResolvedResult = resolved;   /* 这是已经得到的解析好的alias的数组*/
+
+            /*  得到处理出错的Alias的信息*/
             if (errorAlias.ToString().Length >  0 ){
                 ResolveError error=new ResolveError ();
                 error.OriginalText = errorAlias.ToString();

@@ -17,6 +17,7 @@
 	padding-bottom: 10px;
 	z-index: 0;
 	text-align: left;
+	border-radius: 7px;
 }
 input.JQuery_Plug_PeopleEditer_input
 {
@@ -82,6 +83,17 @@ input.JQuery_Plug_PeopleEditer_input
 }
 .JQuery_Plug_PeopleEditer_Alias:hover{ background-color:#9CAAC1; cursor :default ;  }
 
+.JQuery_Plug_PeopleEditer_MultipleUnResolve
+{
+	background-image: url('../Pic/squiggle_blue.png');
+	padding-bottom: 2px;
+	background-repeat: repeat;
+	color: #000000;
+	vertical-align: text-top;
+	background-position:left bottom;
+	font-style: italic;
+}
+
 .JQuery_Plug_PeopleEditer_ResolveError
 {
 	background-image: url('../Pic/squiggle.png');
@@ -103,4 +115,34 @@ input.JQuery_Plug_PeopleEditer_input
 	border: none;
 	padding-bottom: 2px;
 }
+
+
+HideMultipleUnResolveAlias_UL{ display: none;}
+ul.MultipleUnResolveAlias_UL
+{
+    border-radius: 7px;
+    min-height :50px;
+    min-width: 200px;
+    display: none;
+    list-style : none;
+    position: absolute ;
+    z-index :2;
+    background-color:#D0E4F7;
+    text-align: left ;
+    padding-left:0px;
+    border:1px solid #003759;
+    font-family: Calibri;
+	font-size: 14px;
+}
+ul.MultipleUnResolveAlias_UL li
+{
+    margin: 5px 5px;
+	font-style:normal;
+	color: #003759;
+	padding-left:20px;
+	padding-right:20px;
+	min-height: 25px; line-height: 25px;
+	border-radius: 7px;
+}
+ul.MultipleUnResolveAlias_UL li:hover{ background-color: #2365A4; cursor :pointer; color :White;}
 
